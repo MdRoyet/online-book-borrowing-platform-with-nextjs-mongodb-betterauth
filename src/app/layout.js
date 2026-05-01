@@ -6,6 +6,9 @@ import "./globals.css";
 import Banner from "@/components/banner/Banner";
 import Marquee from "@/components/banner/Marquee";
 import FeaturedBooks from "@/components/home/FeaturedBooks";
+import MoodMatcher from "@/components/home/MoodMatcher";
+import LiveActivityFeed from "@/components/home/LiveActivityFeed";
+import CategoryExplorer from "@/components/home/CategoryExplorer";
 
 // Initialize the fonts we discussed
 const inter = Inter({
@@ -47,6 +50,12 @@ export default function RootLayout({ children }) {
         {/* Featured Books Section */}
 
         <FeaturedBooks></FeaturedBooks>
+
+        {/* Modern Featured Sections */}
+
+        <MoodMatcher></MoodMatcher>
+        <LiveActivityFeed></LiveActivityFeed>
+        <CategoryExplorer></CategoryExplorer>
 
         {/* 2. Main content (children) takes up the remaining vertical space */}
         {/* 'flex-grow' ensures that even if a page has very little content, the footer is still pushed to the very bottom */}
