@@ -22,7 +22,9 @@ export default function SingleBookDetailsPage() {
   useEffect(() => {
     // If auth check is done and there is no user, kick them to login
     if (!isPending && !session) {
-      toast.warning("You must be logged in to view book details.");
+      toast.warning("You must be logged in to view book details.", {
+        toastId: "auth-warning-toast",
+      });
       router.push("/login");
       return;
     }
