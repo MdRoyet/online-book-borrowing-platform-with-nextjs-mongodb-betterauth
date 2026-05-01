@@ -3,6 +3,7 @@ import { Inter, Outfit } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import "./globals.css";
+import Banner from "@/components/banner/Banner";
 
 // Initialize the fonts we discussed
 const inter = Inter({
@@ -32,6 +33,8 @@ export default function RootLayout({ children }) {
       >
         {/* 1. Navbar goes at the very top */}
         <Navbar />
+
+        <Banner></Banner>
 
         {/* 2. Main content (children) takes up the remaining vertical space */}
         {/* 'flex-grow' ensures that even if a page has very little content, the footer is still pushed to the very bottom */}
