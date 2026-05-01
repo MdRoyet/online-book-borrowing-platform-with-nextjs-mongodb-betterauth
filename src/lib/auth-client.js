@@ -5,4 +5,4 @@ export const authClient = createAuthClient({
 });
 
 // Export the hooks we need for our UI
-export const { signIn, signUp, useSession, signOut } = authClient;
+export const { signIn, signUp, useSession, signOut, updateUser } = authClient;

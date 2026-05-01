@@ -1,15 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+// 1. Import usePathname alongside useRouter
+import { useRouter, usePathname } from "next/navigation";
 import { toast } from "react-toastify";
-// Import the real auth hooks
 import { useSession, signOut } from "@/lib/auth-client";
 
 export default function Navbar() {
-  // Grab the real user session from the database
   const { data: session, isPending } = useSession();
   const router = useRouter();
+  // 2. Initialize the pathname hook to track the current URL
+  const pathname = usePathname();
 
   const handleLogout = async () => {
     await signOut({
@@ -22,22 +23,25 @@ export default function Navbar() {
     });
   };
 
-  // CENTER: Navigation links for Home, All Books, and My Profile
+  // 3. Helper function to determine if a link is active
+  const getLinkClass = (path) => {
+    return `transition-colors font-medium ${
+      pathname === path
+        ? "text-primary font-bold" // Active state styling
+        : "hover:text-primary text-base-content/80" // Default styling
+    }`;
+  };
+
+  // CENTER: Navigation links
   const navLinks = (
     <>
       <li>
-        <Link
-          href="/"
-          className="hover:text-primary transition-colors font-medium"
-        >
+        <Link href="/" className={getLinkClass("/")}>
           Home
         </Link>
       </li>
       <li>
-        <Link
-          href="/books"
-          className="hover:text-primary transition-colors font-medium"
-        >
+        <Link href="/books" className={getLinkClass("/books")}>
           All Books
         </Link>
       </li>
@@ -45,10 +49,7 @@ export default function Navbar() {
       {/* My Profile link is ONLY shown when the user is logged in */}
       {session && (
         <li>
-          <Link
-            href="/profile"
-            className="hover:text-primary transition-colors font-medium"
-          >
+          <Link href="/profile" className={getLinkClass("/profile")}>
             My Profile
           </Link>
         </li>
@@ -110,7 +111,7 @@ export default function Navbar() {
             <span className="loading loading-spinner loading-sm text-primary"></span>
           ) : session ? (
             <div className="flex items-center gap-3 sm:gap-4">
-              {/* NEW: User Avatar added here! */}
+              {/* User Avatar */}
               <div className="avatar">
                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full ring ring-primary/30 ring-offset-base-100 ring-offset-2">
                   <img

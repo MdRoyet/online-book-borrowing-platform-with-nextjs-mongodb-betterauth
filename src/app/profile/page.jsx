@@ -1,6 +1,7 @@
 "use client";
 
 import { useSession } from "@/lib/auth-client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -29,26 +30,37 @@ export default function ProfilePage() {
     <div className="container mx-auto px-4 py-12 min-h-screen">
       <div className="max-w-3xl mx-auto">
         {/* Profile Header */}
-        <div className="flex flex-col md:flex-row items-center gap-6 mb-10 text-center md:text-left">
-          <div className="avatar">
-            <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 shadow-xl">
-              <img
-                src={
-                  user.image ||
-                  `https://ui-avatars.com/api/?name=${user.name}&background=random&size=200`
-                }
-                alt="Profile"
-              />
+        {/* Profile Header */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-10 text-center md:text-left">
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            <div className="avatar">
+              <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 shadow-xl">
+                <img
+                  src={
+                    user.image ||
+                    `https://ui-avatars.com/api/?name=${user.name}&background=random&size=200`
+                  }
+                  alt="Profile"
+                />
+              </div>
+            </div>
+            <div>
+              <h1 className="text-4xl font-heading font-extrabold mb-2">
+                My Profile
+              </h1>
+              <p className="text-base-content/70">
+                Manage your account information and view your details.
+              </p>
             </div>
           </div>
-          <div>
-            <h1 className="text-4xl font-heading font-extrabold mb-2">
-              My Profile
-            </h1>
-            <p className="text-base-content/70">
-              Manage your account information and view your details.
-            </p>
-          </div>
+
+          {/* THE NEW UPDATE BUTTON */}
+          <Link
+            href="/profile/update"
+            className="btn btn-primary rounded-xl text-white shadow-md"
+          >
+            Update Information
+          </Link>
         </div>
 
         {/* Information Table Card */}
