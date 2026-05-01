@@ -1,68 +1,29 @@
-import { Inter, Outfit } from "next/font/google";
-// Import your layout components
+import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import "./globals.css";
-import Banner from "@/components/banner/Banner";
-import Marquee from "@/components/banner/Marquee";
-import FeaturedBooks from "@/components/home/FeaturedBooks";
-import MoodMatcher from "@/components/home/MoodMatcher";
-import LiveActivityFeed from "@/components/home/LiveActivityFeed";
-import CategoryExplorer from "@/components/home/CategoryExplorer";
-
-// Initialize the fonts we discussed
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-  display: "swap",
-});
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata = {
-  title: "Mango | Online Book Borrowing Platform",
-  description:
-    "A seamless and modern web application designed to digitize the traditional library experience.",
+  title: "BookedBorrow | Digital Library",
+  description: "A seamless and modern web application for your reading needs.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="light">
-      <body
-        // Notice the 'min-h-screen flex flex-col' classes here!
-        className={`${inter.variable} ${outfit.variable} font-sans antialiased bg-base-100 text-base-content min-h-screen flex flex-col`}
-      >
-        {/* 1. Navbar goes at the very top */}
+      <body className="flex flex-col min-h-screen">
+        {/* Navbar shows on every page */}
         <Navbar />
 
-        {/* Banner */}
-
-        <Banner></Banner>
-
-        {/* Marquee */}
-
-        <Marquee></Marquee>
-
-        {/* Featured Books Section */}
-
-        <FeaturedBooks></FeaturedBooks>
-
-        {/* Modern Featured Sections */}
-
-        <MoodMatcher></MoodMatcher>
-        <LiveActivityFeed></LiveActivityFeed>
-        <CategoryExplorer></CategoryExplorer>
-
-        {/* 2. Main content (children) takes up the remaining vertical space */}
-        {/* 'flex-grow' ensures that even if a page has very little content, the footer is still pushed to the very bottom */}
+        {/* This is where your individual pages (Home, Login, etc.) get injected */}
         <main className="flex-grow">{children}</main>
 
-        {/* 3. Footer goes at the very bottom */}
+        {/* Footer shows on every page */}
         <Footer />
+
+        {/* Toast notifications */}
+        <ToastContainer position="top-right" autoClose={3000} theme="colored" />
       </body>
     </html>
   );
