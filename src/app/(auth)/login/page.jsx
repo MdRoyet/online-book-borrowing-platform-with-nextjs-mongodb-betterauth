@@ -4,23 +4,43 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import Link from "next/link";
-// Make sure SocialLogin is properly imported!
 import SocialLogin from "@/components/auth/SocialLogin";
+// Import the signIn hook from our Better Auth client
+import { signIn } from "@/lib/auth-client";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Mock validation logic
-    if (email === "admin@mango.com" && password === "123456") {
-      toast.success("Welcome back! Login successful.");
-      router.push("/");
-    } else {
-      toast.error("Invalid email or password. Please try again.");
+    if (!email || !password) {
+      toast.error("Please fill in both fields.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // Connect to MongoDB via Better Auth
+      const { data, error } = await signIn.email({
+        email,
+        password,
+      });
+
+      if (error) {
+        toast.error(error.message || "Invalid email or password.");
+      } else {
+        toast.success("Welcome back! Login successful.");
+        router.push("/"); // Send them to the Home Page
+      }
+    } catch (err) {
+      toast.error("Something went wrong on the server.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -35,7 +55,6 @@ export default function LoginPage() {
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
-          {/* Added w-full to form-control and input to force stacking */}
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text font-semibold">Email</span>
@@ -65,12 +84,16 @@ export default function LoginPage() {
           <button
             type="submit"
             className="btn btn-primary w-full rounded-xl text-white mt-4"
+            disabled={isLoading}
           >
-            Login
+            {isLoading ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              "Login"
+            )}
           </button>
         </form>
 
-        {/* The SocialLogin component correctly called as a JSX element */}
         <div className="mt-6">
           <SocialLogin />
         </div>

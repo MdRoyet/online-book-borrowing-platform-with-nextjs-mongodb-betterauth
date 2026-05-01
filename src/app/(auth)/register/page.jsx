@@ -4,8 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import Link from "next/link";
-// Import the SocialLogin component we just created
 import SocialLogin from "@/components/auth/SocialLogin";
+// Import the signUp hook from our Better Auth client
+import { signUp } from "@/lib/auth-client";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -15,22 +16,38 @@ export default function RegisterPage() {
     password: "",
   });
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
-    // Validation: Ensure required fields are not empty
     if (!formData.name || !formData.email || !formData.password) {
       toast.error("Please fill in all required fields.");
       return;
     }
 
-    // Success logic mock
-    console.log("Registering user:", formData);
-    toast.success("Account created successfully! Please log in.");
+    setIsLoading(true);
 
-    // Redirect to login page after successful registration
-    router.push("/login");
+    try {
+      // Connect to MongoDB via Better Auth
+      const { data, error } = await signUp.email({
+        email: formData.email,
+        password: formData.password,
+        name: formData.name,
+        image: formData.photoUrl || "",
+      });
+
+      if (error) {
+        toast.error(error.message || "Failed to register. Try again.");
+      } else {
+        toast.success("Account created successfully! Please log in.");
+        router.push("/login");
+      }
+    } catch (err) {
+      toast.error("Something went wrong on the server.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -40,7 +57,6 @@ export default function RegisterPage() {
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full bg-base-100 rounded-3xl shadow-2xl border border-base-200 p-8">
-        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-heading font-extrabold mb-2">
             Create Account
@@ -50,9 +66,7 @@ export default function RegisterPage() {
           </p>
         </div>
 
-        {/* Registration Form */}
         <form onSubmit={handleRegister} className="space-y-4">
-          {/* Name Field */}
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text font-semibold">Full Name *</span>
@@ -68,7 +82,6 @@ export default function RegisterPage() {
             />
           </div>
 
-          {/* Email Field */}
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text font-semibold">Email Address *</span>
@@ -84,7 +97,6 @@ export default function RegisterPage() {
             />
           </div>
 
-          {/* Photo URL Field (Optional) */}
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text font-semibold">Photo URL</span>
@@ -99,7 +111,6 @@ export default function RegisterPage() {
             />
           </div>
 
-          {/* Password Field */}
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text font-semibold">Password *</span>
@@ -115,21 +126,23 @@ export default function RegisterPage() {
             />
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="btn btn-primary w-full rounded-xl text-white mt-6 shadow-lg shadow-primary/20"
+            disabled={isLoading}
           >
-            Register
+            {isLoading ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              "Register"
+            )}
           </button>
         </form>
 
-        {/* Social Login (Google) */}
         <div className="mt-4">
           <SocialLogin />
         </div>
 
-        {/* Link back to Login */}
         <p className="text-center mt-8 text-sm">
           Already have an account?{" "}
           <Link
