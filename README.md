@@ -6,7 +6,7 @@ A sleek, modern, and highly interactive digital library application built with *
 
 ## 🚀 Live Link
 
-[**View Live Demo**](https://your-live-link.vercel.app) _(Replace with your actual Vercel/Netlify URL)_
+[**View Live Demo**](https://online-book-borrowing-platform-with.vercel.app/)
 
 ## 🎯 Purpose
 
